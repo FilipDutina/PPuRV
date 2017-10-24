@@ -1,0 +1,14 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<inttypes.h>
+
+struct Node
+{
+	int_least32_t data;
+	struct Node* next;
+	struct Node* previous;
+};
+
+void push(struct Node** headRef, int_least32_t newData);
+void insertAfter(struct Node* prevNode, int_least32_t newData);
+void printList(struct Node* node);

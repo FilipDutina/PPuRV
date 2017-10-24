@@ -1,0 +1,4 @@
+#include "dll.h"
+#include<dlfcn.h>
+
+void main(void);

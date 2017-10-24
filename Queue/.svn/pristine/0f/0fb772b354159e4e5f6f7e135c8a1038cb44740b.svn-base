@@ -1,0 +1,54 @@
+#include "queue.h"
+
+void main(void)
+{
+	void* handle;
+	void(*push)(struct Node**, int_least32_t);
+	void(*pop)(struct Node**);
+	void(*printList)(struct Node*);
+	char* error;
+
+	struct Node* head = NULL;
+
+	handle = dlopen("libDLL.so", RTLD_LAZY);
+
+	if(handle == NULL)
+	{
+		fputs(dlerror(), stderr);
+		exit(1);
+	}
+
+	push = dlsym(handle, "push");
+	pop = dlsym(handle, "pop");
+	printList = dlsym(handle, "printList");
+
+	if((error = dlerror()) != NULL)
+	{
+		fputs(error, stderr);
+		exit(1);
+	}
+
+	(*printList)(head);
+
+	printf("Adding element to the queue...\n");
+	(*push)(&head, 1);
+	printf("Adding element to the queue...\n");
+	(*push)(&head, 2);
+	printf("Adding element to the queue...\n");
+	(*push)(&head, 3);
+	printf("Adding element to the queue...\n");
+	(*push)(&head, 4);
+	printf("Adding element to the queue...\n");
+	(*push)(&head, 5);
+
+	(*printList)(head);
+
+	printf("Remove element from the list...\n");
+	(*pop)(head);
+
+	(*printList)(head);
+
+	dlclose(handle);
+}
+
+

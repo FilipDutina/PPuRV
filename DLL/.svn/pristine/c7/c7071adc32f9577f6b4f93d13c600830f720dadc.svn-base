@@ -1,0 +1,59 @@
+#include "dll.h"
+
+struct Node* createNewNode(int_least32_t newData)
+{
+	struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+
+	newNode->data = newData;
+	newNode->next = NULL;
+	newNode->previous = NULL;
+
+	return newNode;
+}
+
+void push(struct Node** headRef, int_least32_t newData)
+{
+	struct Node* newNode = createNewNode(newData);
+
+	newNode->next = *headRef;
+	newNode->previous = NULL;
+
+	if((*headRef) != NULL)
+		(*headRef)->previous = newNode;
+
+	*headRef = newNode;
+}
+
+void pop(struct Node* node)
+{
+	if(node == NULL)
+	{
+		printf("Queue is empty!\n");
+		return;
+	}
+
+	while(node->next != NULL)
+	{
+		node = node->next;
+	}
+
+	node->previous->next = NULL;
+	free(node);
+}
+
+void printList(struct Node* node)
+{
+	if(node == NULL)
+	{
+		printf("Queue is empty!\n");
+		return;
+	}
+
+	printf("Forward:\n");
+
+	while(node != NULL)
+	{
+		printf(" % "PRIdLEAST32, node->data);
+		node = node->next;
+	}
+}
