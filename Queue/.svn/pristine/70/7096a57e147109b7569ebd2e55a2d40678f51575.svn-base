@@ -13,7 +13,37 @@
 
 /*IDEJA I REALIZACIJA*/
 
-/**/
+/*Najpre sam napravio dinamicku biblioteku u kojoj se nalaze "dll.h" i "dll.c" fajlovi.
+ * U "dll.h" fajlu se nalazi struktura koja predstavlja jedan element dvostruko
+ * spregnute liste i deklaracije funkcija. U "dll.c" fajlu se nalaze definicije
+ * funkcija. Zatim sam napravio "main.c" fajl koji sam uvezao sa DLL dinamickom
+ * bibliotekom i omogucio dinamicko povezivanje prilikom izvrsavanja.*/
+
+/************************************************************************************/
+
+/*NAPOMENE*/
+
+/*U DLL modulu od MISRA pravila sam prekrsio pravilo 20.4 koje se dinamickog zauzimanja
+ * memorije. Ostala pravila sam ispostovao. Sto se tice "main.c" fajla, vise MISRA
+ * pravila sam prekrsio i razlozi su navedeni iznad datih linija koda. Pri pisanju
+ * ovog programa trudio sam se da u sto vecoj meri cuvam resurse i stoga sam
+ * izabrao da mi tip podatka u dvostruko spregnutoj listi (redu) bude int_least32_t
+ * (velicinu sam izabrao po sopstvenom nahodjenju jer nisam siguran za kakav sistem
+ * pisem program). Teoretski, velicina same liste (reda) moze da bude neogranicena,
+ * odnosno onolika koliko je velika memorija.*/
+
+/************************************************************************************/
+
+/*TESTIRANJE*/
+
+/*Sto se testiranja tice, prvo sam izveo neke jednostavnije provere, cisto da budem
+ * siguran da je program u potpunosti funkcionalan. Nakon toga sam pokusavao da
+ * ubacujem tipove podataka koji ne bi smeli da se pojave u listi. Takodje sam
+ * unosio validan tip podataka ali veci od dozvoljenog pa dolazi do "overflow-a". S
+ * obzirom da sam koristo oznaceni tip podataka, vrednost na izlazu prelazi u suprotan
+ * znak od unetog kada dodje do granice (kriticne vrednosti).*/
+
+/************************************************************************************/
 
 #if 0
 	#define FPUTS(a) fputs a
@@ -60,6 +90,11 @@ void main(void)
 	{
 		if(retVal1 != 1)
 		{
+			/*Ovde za sve tri funkcije dobijam upozorenja od MISRE, medjutim u
+			 * "MISRA-C:2004 Guidelines for the use of the C language in critical
+			 * systems" ne postoji ovaj tip upozorenja pa ga nisam mogao resiti*/
+			/*warning: a value of type "void *" cannot be assigned to an entity
+			 * of type "void (*)*/
 			push = dlsym(handle, "push");
 			pop = dlsym(handle, "pop");
 			printList = dlsym(handle, "printList");
@@ -122,7 +157,8 @@ void main(void)
 					(*printList)(head);
 
 					(*pop)(&head);
-
+					/*Sledece vrednosti su namerno van opsega radi testiranja, pa
+					 * su MISRA upozorenja zanemarena*/
 					(*push)(&head, 1000000000000000);
 
 					(*printList)(head);
@@ -132,6 +168,13 @@ void main(void)
 					(*printList)(head);
 
 					(*push)(&head, -1000000000000000.0);
+
+					(*printList)(head);
+
+					(*push)(&head, 's');
+					/*Overflow*/
+					(*push)(&head, 2147483647);
+					(*push)(&head, 2147483648);
 
 					(*printList)(head);
 				}
