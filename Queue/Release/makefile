@@ -31,13 +31,18 @@ Queue: $(OBJS) $(USER_OBJS)
 	gcc  -o "Queue" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
+	$(MAKE) --no-print-directory post-build
 
 # Other Targets
 clean:
 	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) Queue
 	-@echo ' '
 
+post-build:
+	-/home/filip/Desktop/c6000_7.4.23/bin/cl6x --include_path=/home/filip/Desktop/c6000_7.4.23/include --compile_only -I /usr/include/i386-linux-gnu -I /usr/include/i386-linux-gnu/sys -I /usr/include --check_misra=all $(C_SRCS)
+	-@echo ' '
+
 .PHONY: all clean dependents
-.SECONDARY:
+.SECONDARY: post-build
 
 -include ../makefile.targets
