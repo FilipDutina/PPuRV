@@ -10,6 +10,7 @@
 
 #include "dll.h"
 
+/*Funkcija push sluzi za dodavanje elementa na pocetak liste (reda)*/
 void push(struct Node** headNode, int_least32_t newData)
 {
 	struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
@@ -31,6 +32,7 @@ void push(struct Node** headNode, int_least32_t newData)
 	(*headNode) = newNode;
 }
 
+/*Funkcija pop sluzi za uklanjanje poslednjeg elementa iz liste (reda)*/
 void pop(struct Node** headNode)
 {
 	if((*headNode) == NULL)
@@ -59,6 +61,7 @@ void pop(struct Node** headNode)
 	}
 }
 
+/*Funkcija printList sluzi za ispis liste (reda)*/
 void printList(struct Node* headNode)
 {
 	if(headNode == NULL)
